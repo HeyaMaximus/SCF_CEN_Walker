@@ -238,7 +238,7 @@ class MessagingApp {
             await this.sendToChatGPT(message);
         } else {
             this.messageQueue.push(message);
-            this.addMessageToHistory('system', 'Message queued until online.');
+            this.addMessageToHistory('system', 'Message queued until online.');s
             this.saveMessageQueue();
         }
     }
@@ -249,7 +249,7 @@ class MessagingApp {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer `
+                    'Authorization': `Bearer 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`
                 },
                 body: JSON.stringify({
                     model: "gpt-4",
