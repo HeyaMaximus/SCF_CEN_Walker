@@ -249,7 +249,7 @@ class MessagingApp {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_API_KEY`
+                    'Authorization': `Bearer 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`
                 },
                 body: JSON.stringify({
                     model: "gpt-4",
