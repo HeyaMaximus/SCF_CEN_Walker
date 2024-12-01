@@ -2,9 +2,11 @@
     "name": "Maximus Draw & Chat PWA",
     "short_name": "MaximusDrawChat",
     "start_url": "/index.html",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#317EFB",
+    "description": "A Progressive Web App for drawing and chatting.",
     "icons": [
         {
             "src": "MaximusCapstone.png",
