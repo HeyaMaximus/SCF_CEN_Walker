@@ -177,12 +177,29 @@ class DrawingApp {
     }
 
     downloadDrawing() {
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const canvas = this.canvas;
+        const tempCanvas = document.createElement('canvas');
+        const tempContext = tempCanvas.getContext('2d');
+    
+        // Set the dimensions of the temporary canvas
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+    
+        // Fill the temporary canvas with a white background
+        tempContext.fillStyle = '#FFFFFF';
+        tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    
+        // Draw the current canvas content on top of the white background
+        tempContext.drawImage(canvas, 0, 0);
+    
+        // Create a download link for the image
         const link = document.createElement('a');
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         link.download = `drawing-${timestamp}.jpg`;
-        link.href = this.canvas.toDataURL('image/jpeg');
+        link.href = tempCanvas.toDataURL('image/jpeg');
         link.click();
     }
+    
 }
 
 class MessagingApp {
