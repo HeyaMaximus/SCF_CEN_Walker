@@ -249,7 +249,7 @@ class MessagingApp {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer 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`
+                    'Authorization': `Bearer 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`
                 },
                 body: JSON.stringify({
                     model: "gpt-4",
