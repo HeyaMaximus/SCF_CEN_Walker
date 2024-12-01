@@ -34,7 +34,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "scf-cen-capstone"
+          project: "scf-cen-walker"
           entrypoint: "package.json"
           root: ""
           
