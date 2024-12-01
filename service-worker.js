@@ -1,4 +1,5 @@
 // service-worker.js
+
 const CACHE_NAME = 'drawchat-v1';
 const ASSETS_TO_CACHE = [
     '/',
@@ -8,66 +9,66 @@ const ASSETS_TO_CACHE = [
     '/manifest.json',
     '/offline-page.html',
     '/MaximusCapstone.png'
- 
 ];
 
 // Install event
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(ASSETS_TO_CACHE))
+            .then((cache) => cache.addAll(ASSETS_TO_CACHE))
             .then(() => self.skipWaiting())
+            .catch((error) => console.error('Error caching assets during install:', error))
     );
 });
 
 // Activate event
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => self.clients.claim())
+        caches.keys()
+            .then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        if (cacheName !== CACHE_NAME) {
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+            .then(() => self.clients.claim())
+            .catch((error) => console.error('Error during activation:', error))
     );
 });
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
-    // Skip cross-origin requests
     if (!event.request.url.startsWith(self.location.origin)) {
         return;
     }
 
     event.respondWith(
         caches.match(event.request)
-            .then(response => {
+            .then((response) => {
                 if (response) {
                     return response;
                 }
 
-                return fetch(event.request).then(response => {
-                    // Don't cache non-successful responses
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
+                return fetch(event.request)
+                    .then((networkResponse) => {
+                        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                            return networkResponse;
+                        }
 
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, responseToCache).catch((error) =>
+                                console.error('Failed to cache new resource:', error)
+                            );
                         });
 
-                    return response;
-                });
+                        return networkResponse;
+                    });
             })
             .catch(() => {
-                // Return offline page for navigation requests
                 if (event.request.mode === 'navigate') {
                     return caches.match('/offline-page.html');
                 }
@@ -94,14 +95,8 @@ self.addEventListener('push', (event) => {
             primaryKey: 1
         },
         actions: [
-            {
-                action: 'explore',
-                title: 'Open DrawChat'
-            },
-            {
-                action: 'close',
-                title: 'Close'
-            }
+            { action: 'explore', title: 'Open DrawChat' },
+            { action: 'close', title: 'Close' }
         ]
     };
 
@@ -113,7 +108,6 @@ self.addEventListener('push', (event) => {
 // Notification click handling
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-
     if (event.action === 'explore') {
         event.waitUntil(
             clients.openWindow('/')
@@ -121,6 +115,7 @@ self.addEventListener('notificationclick', (event) => {
     }
 });
 
+// Sync messages (stubbed implementation)
 async function syncMessages() {
     try {
         const messages = await getQueuedMessages();
@@ -133,16 +128,18 @@ async function syncMessages() {
     }
 }
 
-// Helper functions for IndexedDB operations
+// Helper functions for IndexedDB operations (stubbed for future implementation)
 async function getQueuedMessages() {
-    // Implementation would go here
+    // Stub for fetching queued messages
     return [];
 }
 
 async function sendMessage(message) {
-    // Implementation would go here
+    // Stub for sending messages to the server
+    console.log('Sending message:', message);
 }
 
 async function clearQueuedMessages() {
-    // Implementation would go here
+    // Stub for clearing queued messages
+    console.log('Queued messages cleared.');
 }
