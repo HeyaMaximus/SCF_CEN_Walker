@@ -6,7 +6,6 @@ class PWAManager {
                 const registration = await navigator.serviceWorker.register('/service-worker.js');
                 console.log('ServiceWorker registration successful:', registration);
                 
-                // Set up push notifications
                 if ('Notification' in window) {
                     const permission = await Notification.requestPermission();
                     console.log('Notification permission:', permission);
@@ -29,10 +28,9 @@ class UIManager {
     }
 
     initializeUI() {
-        // Add app shell elements
         document.body.innerHTML = `
             <div class="app-header">
-                <h1>DeshDrawChat</h1>
+                <h1>MaximusDrawChat</h1>
                 <div class="connection-status" id="connectionStatus"></div>
                 <button id="installPWA" class="hidden">Install App</button>
             </div>
@@ -58,12 +56,11 @@ class UIManager {
     }
 
     setupThemeHandling() {
-        // Add theme detection and handling
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const handleThemeChange = (e) => {
             document.body.classList.toggle('dark-theme', e.matches);
         };
-        prefersDark.addListener(handleThemeChange);
+        prefersDark.addEventListener('change', handleThemeChange);
         handleThemeChange(prefersDark);
     }
 
@@ -90,7 +87,6 @@ class DrawingApp {
     }
 
     setupCanvas() {
-        // Make canvas responsive
         const resizeCanvas = () => {
             const rect = this.canvas.parentElement.getBoundingClientRect();
             this.canvas.width = rect.width;
@@ -105,7 +101,6 @@ class DrawingApp {
     }
 
     setupTouchEvents() {
-        // Add touch support
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
@@ -177,7 +172,6 @@ class DrawingApp {
     }
 
     downloadDrawing() {
-        // Add timestamp to filename
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const link = document.createElement('a');
         link.download = `drawing-${timestamp}.jpg`;
@@ -234,7 +228,7 @@ class MessagingApp {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer API-KEY-HERE`
+                    'Authorization': `Bearer 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`
                 },
                 body: JSON.stringify({
                     model: "gpt-4o-mini",
